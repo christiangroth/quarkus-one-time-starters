@@ -1,4 +1,4 @@
-package de.chrgroth.starters
+package de.chrgroth.quarkus.starters
 
 import io.micrometer.core.instrument.Gauge
 import io.micrometer.core.instrument.MeterRegistry

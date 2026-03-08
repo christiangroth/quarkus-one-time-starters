@@ -1,4 +1,4 @@
-package de.chrgroth.starters
+package de.chrgroth.quarkus.starters
 
 enum class StarterStatus {
     PENDING,

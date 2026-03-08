@@ -1,4 +1,4 @@
-package de.chrgroth.starters
+package de.chrgroth.quarkus.starters
 
 import io.quarkus.runtime.LaunchMode
 import io.quarkus.runtime.StartupEvent

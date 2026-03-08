@@ -1,4 +1,4 @@
-package de.chrgroth.starters
+package de.chrgroth.quarkus.starters
 
 import jakarta.enterprise.context.ApplicationScoped
 import java.util.concurrent.atomic.AtomicBoolean

@@ -1,4 +1,4 @@
-package de.chrgroth.starters
+package de.chrgroth.quarkus.starters
 
 import io.quarkus.scheduler.Scheduled
 import io.quarkus.scheduler.ScheduledExecution

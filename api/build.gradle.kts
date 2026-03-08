@@ -1,10 +1,7 @@
 plugins {
   id("kotlin-project")
   alias(libs.plugins.allopen)
-  `maven-publish`
 }
-
-group = "de.chrgroth.starters"
 
 dependencies {
   implementation(enforcedPlatform(libs.quarkusBom))

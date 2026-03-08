@@ -1,3 +1,12 @@
+# 0.2.0 (2026.03.08)
+
+## New Features
+* split-up-impl-module: Renamed `api` module to `domain-api` and split `impl` into `domain-impl` and `adapter-out-persistence-mongodb`.
+* split-up-impl-module: MongoDB collection indexes are now synced on startup — obsolete indexes are removed and predefined ones are added.
+
+
+
+---
 # 0.1.0 (2026.03.08)
 
 ## New Features

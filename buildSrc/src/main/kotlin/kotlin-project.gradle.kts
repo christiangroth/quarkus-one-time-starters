@@ -15,7 +15,6 @@ repositories {
 dependencies {
   testImplementation(libs.findLibrary("junit").get())
   testImplementation(libs.findLibrary("assertJ").get())
-  testRuntimeOnly(libs.findLibrary("junitPlatformLauncher").get())
 }
 
 tasks.withType<Test> {

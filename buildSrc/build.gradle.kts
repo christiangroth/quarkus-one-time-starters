@@ -1,5 +1,6 @@
 plugins {
   `kotlin-dsl`
+  `java-gradle-plugin`
 }
 
 repositories {
@@ -9,4 +10,6 @@ repositories {
 
 dependencies {
   implementation(libs.kotlinGradlePlugin)
+  implementation(libs.detekt)
+  implementation(libs.kover)
 }

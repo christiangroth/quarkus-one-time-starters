@@ -18,7 +18,9 @@ jobs:
       - name: Gradle Setup
         uses: gradle/actions/setup-gradle@v5
       - name: Build
-        run: ./gradlew --stacktrace build
+        run: ./gradlew build
+        env:
+          GHCR_PAT: ${{ secrets.GHCR_PAT }}
 
   release:
     runs-on: ubuntu-latest
@@ -42,7 +44,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
       - name: Release & Publish
-        run: ./gradlew --stacktrace release -x test
+        run: ./gradlew release -x test
         env:
+          GHCR_PAT: ${{ secrets.GHCR_PAT }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_ACTOR: ${{ github.actor }}

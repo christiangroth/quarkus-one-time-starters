@@ -27,9 +27,6 @@ quarkusBom = { module = "io.quarkus.platform:quarkus-bom", version.ref = "quarku
 [plugins]
 allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
 buildTimeTracker = { id = "com.asarkar.gradle.build-time-tracker", version.ref = "buildTimeTracker" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 quarkus = { id = "io.quarkus", version.ref = "quarkus" }
 release = { id = "net.researchgate.release", version.ref = "release" }
 versionCatalogUpdate = { id = "nl.littlerobots.version-catalog-update", version.ref = "versionCatalogUpdate" }

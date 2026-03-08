@@ -4,8 +4,6 @@ plugins {
 }
 
 dependencies {
-  implementation(platform(libs.quarkusBom))
-  implementation("io.quarkus:quarkus-arc")
   implementation("io.quarkus:quarkus-scheduler")
 }
 

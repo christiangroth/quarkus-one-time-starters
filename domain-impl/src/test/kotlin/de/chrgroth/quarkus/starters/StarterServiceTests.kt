@@ -96,4 +96,91 @@ class StarterServiceTests {
 
         assertThat(order).containsExactly("a-starter", "b-starter")
     }
+
+    @Test
+    fun `runAll records timer metric on success`() {
+        val starter = mockk<Starter> {
+            every { id } returns "starter-1"
+            justRun { execute() }
+        }
+        every { starters.stream() } returns Stream.of(starter)
+        every { repository.lastStatus("starter-1") } returns null
+        justRun { repository.recordExecution(any(), any(), any<Instant>(), any<Instant>(), isNull()) }
+
+        service.runAll()
+
+        val timer = meterRegistry.find("starter_execution_duration_seconds")
+            .tag("id", "starter-1")
+            .tag("status", StarterStatus.SUCCEEDED.name)
+            .timer()
+        assertThat(timer).isNotNull()
+        assertThat(timer!!.count()).isEqualTo(1)
+    }
+
+    @Test
+    fun `runAll records timer metric on failure`() {
+        val starter = mockk<Starter> {
+            every { id } returns "starter-fail"
+            every { execute() } throws RuntimeException("oops")
+        }
+        every { starters.stream() } returns Stream.of(starter)
+        every { repository.lastStatus("starter-fail") } returns null
+        justRun { repository.recordExecution(any(), any(), any<Instant>(), any<Instant>(), any()) }
+
+        service.runAll()
+
+        val timer = meterRegistry.find("starter_execution_duration_seconds")
+            .tag("id", "starter-fail")
+            .tag("status", StarterStatus.FAILED.name)
+            .timer()
+        assertThat(timer).isNotNull()
+        assertThat(timer!!.count()).isEqualTo(1)
+    }
+
+    @Test
+    fun `runAll records gauge as success for already-succeeded starter`() {
+        val starter = mockk<Starter> { every { id } returns "starter-1" }
+        every { starters.stream() } returns Stream.of(starter)
+        every { repository.lastStatus("starter-1") } returns StarterStatus.SUCCEEDED
+
+        service.runAll()
+
+        val gauge = meterRegistry.find("starter_overall_status").tag("id", "starter-1").gauge()
+        assertThat(gauge).isNotNull()
+        assertThat(gauge!!.value()).isEqualTo(1.0)
+    }
+
+    @Test
+    fun `runAll records gauge as success for successful starter`() {
+        val starter = mockk<Starter> {
+            every { id } returns "starter-1"
+            justRun { execute() }
+        }
+        every { starters.stream() } returns Stream.of(starter)
+        every { repository.lastStatus("starter-1") } returns null
+        justRun { repository.recordExecution(any(), any(), any<Instant>(), any<Instant>(), isNull()) }
+
+        service.runAll()
+
+        val gauge = meterRegistry.find("starter_overall_status").tag("id", "starter-1").gauge()
+        assertThat(gauge).isNotNull()
+        assertThat(gauge!!.value()).isEqualTo(1.0)
+    }
+
+    @Test
+    fun `runAll records gauge as failure for failed starter`() {
+        val starter = mockk<Starter> {
+            every { id } returns "starter-fail"
+            every { execute() } throws RuntimeException("oops")
+        }
+        every { starters.stream() } returns Stream.of(starter)
+        every { repository.lastStatus("starter-fail") } returns null
+        justRun { repository.recordExecution(any(), any(), any<Instant>(), any<Instant>(), any()) }
+
+        service.runAll()
+
+        val gauge = meterRegistry.find("starter_overall_status").tag("id", "starter-fail").gauge()
+        assertThat(gauge).isNotNull()
+        assertThat(gauge!!.value()).isEqualTo(0.0)
+    }
 }

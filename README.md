@@ -1,6 +1,6 @@
 # quarkus-one-time-starters
 
-A Quarkus extension for managing **idempotent, one-time startup tasks**.
+A Quarkus extension for managing **one-time startup tasks**.
 
 Register tasks that must run exactly once during the application lifecycle. The framework persists execution results to MongoDB, skips already-succeeded tasks on restart, blocks the Quarkus scheduler until all tasks complete, and exposes metrics via Micrometer.
 

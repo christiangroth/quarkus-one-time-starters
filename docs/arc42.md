@@ -2,7 +2,7 @@
 
 ## 1. Introduction and Goals
 
-**Quarkus One-Time Starters** is a Quarkus framework extension that manages idempotent, one-time startup tasks for Quarkus applications.
+**Quarkus One-Time Starters** is a Quarkus framework extension that manages one-time startup tasks for Quarkus applications.
 
 ### Requirements Overview
 
@@ -38,21 +38,7 @@
 
 The library integrates into a Quarkus application as a set of CDI beans. Application developers implement the `Starter` interface and register it as a CDI bean. The framework handles execution, persistence, and scheduling.
 
-```
-┌─────────────────────────────────────────────────┐
-│              Quarkus Application                │
-│                                                 │
-│  ┌──────────────────────────────────────────┐   │
-│  │    quarkus-one-time-starters             │   │
-│  │  (StarterStartup, StarterService, ...)   │   │
-│  └──────────────────────────────────────────┘   │
-│                                                 │
-│  ┌─────────────────┐   ┌────────────────────┐   │
-│  │  User-defined   │   │   MongoDB          │   │
-│  │  Starter impls  │   │   (starters coll.) │   │
-│  └─────────────────┘   └────────────────────┘   │
-└─────────────────────────────────────────────────┘
-```
+![Context and Scope](https://kroki.io/plantuml/svg/eNpVkLtOxTAMhnc_hekEQ16AAR2gC8MZ0BEbi09qStTciN0KhHh33FaAmHLxl99ffBClpnOKcKGvnBhrpJBBppArNUroS6olc9aTfkTGxl4pj5EByGtp2PPCsVRuUMlPNDJ2jzO1aRa8rTUGTxpK7vAT8C8Lu7edcXZ0GhK7zYObdEiCMZz_40_CzQ38EjIPeNpRDKnGnd928AUDKZ1JzOFY8lj6u-d8-RNscTGavdlcbY_SigD8fgCdu9mT8HpbbRxZBfartWhaVhqC-LJwM5MlEN73D7AWVmCLNMTSJIgK8jv7eW2JpqGzwIHzYNP-BskbhKA=)
 
 ---
 

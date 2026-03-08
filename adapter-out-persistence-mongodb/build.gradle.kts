@@ -1,0 +1,15 @@
+plugins {
+  id("kotlin-project")
+  alias(libs.plugins.allopen)
+}
+
+dependencies {
+  implementation(project(":domain-api"))
+
+  implementation("io.quarkus:quarkus-mongodb-panache-kotlin")
+}
+
+allOpen {
+  annotation("jakarta.enterprise.context.ApplicationScoped")
+  annotation("io.quarkus.mongodb.panache.kotlin.PanacheMongoCompanionBase")
+}

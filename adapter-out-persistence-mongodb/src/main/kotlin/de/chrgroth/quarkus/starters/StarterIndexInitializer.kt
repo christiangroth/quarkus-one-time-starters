@@ -44,7 +44,7 @@ class StarterIndexInitializer(
         }
 
         val currentNames = existingNames - obsoleteNames
-        val toCreate = desiredIndexes.filter { it.options.name !in currentNames }
+        val toCreate = desiredIndexes.filter { it.options.name!! !in currentNames }
         if (toCreate.isNotEmpty()) {
             logger.info { "Creating ${toCreate.size} index(es) on starters collection" }
             collection.createIndexes(toCreate)

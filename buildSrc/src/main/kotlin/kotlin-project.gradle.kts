@@ -27,8 +27,10 @@ val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("lib
 
 dependencies {
   implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
+  implementation(platform(libs.findLibrary("quarkusBom").get()))
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
+  implementation("io.quarkus:quarkus-arc")
   implementation(libs.findLibrary("kotlinLogging").get())
   implementation(libs.findLibrary("kotlinxDatetime").get())
 

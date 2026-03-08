@@ -15,3 +15,11 @@ dependencies {
 allOpen {
   annotation("jakarta.enterprise.context.ApplicationScoped")
 }
+
+publishing {
+  publications {
+    create<MavenPublication>("maven") {
+      from(components["java"])
+    }
+  }
+}

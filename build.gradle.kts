@@ -1,7 +1,4 @@
 plugins {
-  `maven-publish`
-  `kotlin-dsl`
-
   alias(libs.plugins.buildTimeTracker)
   alias(libs.plugins.versionCatalogUpdate)
 
@@ -14,14 +11,6 @@ plugins {
 repositories {
   mavenCentral()
   gradlePluginPortal()
-}
-
-dependencies {
-  implementation(libs.grgit)
-
-  testImplementation(libs.junit)
-  testImplementation(libs.assertJ)
-  testRuntimeOnly(libs.junitPlatformLauncher)
 }
 
 detekt {
@@ -46,24 +35,22 @@ release {
 }
 
 // publish wird nach dem Tag-Push automatisch aufgerufen
-tasks {
-  afterReleaseBuild {
-    dependsOn(publish)
-  }
-
-  test {
-    useJUnitPlatform()
-  }
+tasks.named("afterReleaseBuild") {
+  dependsOn(subprojects.map { "${it.path}:publish" })
 }
 
-publishing {
-  repositories {
-    maven {
-      name = "GitHubPackages"
-      url = uri("https://maven.pkg.github.com/christiangroth/quarkus-one-time-starters")
-      credentials {
-        username = System.getenv("GITHUB_ACTOR")
-        password = System.getenv("GITHUB_TOKEN")
+subprojects {
+  apply(plugin = "maven-publish")
+
+  extensions.configure<PublishingExtension> {
+    repositories {
+      maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/christiangroth/quarkus-one-time-starters")
+        credentials {
+          username = System.getenv("GITHUB_ACTOR")
+          password = System.getenv("GITHUB_TOKEN")
+        }
       }
     }
   }

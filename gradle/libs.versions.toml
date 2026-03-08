@@ -1,25 +1,26 @@
 [versions]
-assertJ = "3.27.7"
-buildTimeTracker = "5.0.1"
-detekt = "2.0.0-alpha.2"
-junit = "6.0.3"
-kotlin = "2.3.10"
+assertJ = "3.26.3"
+buildTimeTracker = "4.3.0"
+detekt = "1.23.7"
+grgit = "5.2.2"
+junit = "5.11.4"
+kotlin = "2.0.21"
 kotlinLogging = "3.0.5"
-kotlinxDatetime = "0.7.1"
-kover = "0.9.7"
-mockk = "1.14.9"
-quarkus = "3.32.1"
+kotlinxDatetime = "0.6.1"
+kover = "0.8.3"
+mockk = "1.13.16"
+quarkus = "3.18.4"
 release = "3.1.0"
-versionCatalogUpdate = "1.1.0"
+versionCatalogUpdate = "0.8.5"
 
 [libraries]
 assertJ = { module = "org.assertj:assertj-core", version.ref = "assertJ" }
-detekt = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+grgit = { module = "org.ajoberstar.grgit:grgit-gradle", version.ref = "grgit" }
 junit = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+junitPlatformLauncher = { module = "org.junit.platform:junit-platform-launcher", version = "1.11.4" }
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinLogging = { module = "io.github.microutils:kotlin-logging", version.ref = "kotlinLogging" }
 kotlinxDatetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime-jvm", version.ref = "kotlinxDatetime" }
-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 quarkusAgroal = { module = "io.quarkus:quarkus-agroal" }
 quarkusBom = { module = "io.quarkus.platform:quarkus-bom", version.ref = "quarkus" }
@@ -27,6 +28,9 @@ quarkusBom = { module = "io.quarkus.platform:quarkus-bom", version.ref = "quarku
 [plugins]
 allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
 buildTimeTracker = { id = "com.asarkar.gradle.build-time-tracker", version.ref = "buildTimeTracker" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 quarkus = { id = "io.quarkus", version.ref = "quarkus" }
 release = { id = "net.researchgate.release", version.ref = "release" }
 versionCatalogUpdate = { id = "nl.littlerobots.version-catalog-update", version.ref = "versionCatalogUpdate" }

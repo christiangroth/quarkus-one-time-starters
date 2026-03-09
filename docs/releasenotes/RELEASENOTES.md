@@ -1,3 +1,11 @@
+# 0.4.0 (2026.03.09)
+
+## New Features
+* add-sources-publishing: Sources JARs are now published alongside the compiled JARs to GitHub Packages.
+
+
+
+---
 # 0.3.1 (2026.03.09)
 
 ## Bugfixes / Chore

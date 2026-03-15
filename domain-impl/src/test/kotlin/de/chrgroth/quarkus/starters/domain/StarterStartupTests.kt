@@ -1,4 +1,4 @@
-package de.chrgroth.quarkus.starters
+package de.chrgroth.quarkus.starters.domain
 
 import io.mockk.every
 import io.mockk.justRun
@@ -12,12 +12,12 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class StarterStartupTests {
+class StarterStartupTests {Scheduler
 
-    private val starterService: StarterService = mockk()
-    private val completionFlag: StarterCompletionFlag = mockk()
+    private val startersAdapter: ExecutionAdapter = mockk()
+    private val completionFlag: StartupAdapter = mockk()
 
-    private val startup = StarterStartup(starterService, completionFlag)
+    private val startup = StarterStartup(startersAdapter, completionFlag)
 
     @BeforeEach
     fun setup() {
@@ -36,7 +36,7 @@ class StarterStartupTests {
 
         startup.onStart(StartupEvent())
 
-        verify(exactly = 0) { starterService.runAll() }
+        verify(exactly = 0) { startersAdapter.runAll() }
         verify { completionFlag.markCompleted() }
     }
 
@@ -46,29 +46,29 @@ class StarterStartupTests {
 
         startup.onStart(StartupEvent())
 
-        verify(exactly = 0) { starterService.runAll() }
+        verify(exactly = 0) { startersAdapter.runAll() }
         verify { completionFlag.markCompleted() }
     }
 
     @Test
     fun `onStart runs starters and marks completion when all succeed in NORMAL mode`() {
         every { LaunchMode.current() } returns LaunchMode.NORMAL
-        every { starterService.runAll() } returns true
+        every { startersAdapter.runAll() } returns true
 
         startup.onStart(StartupEvent())
 
-        verify { starterService.runAll() }
+        verify { startersAdapter.runAll() }
         verify { completionFlag.markCompleted() }
     }
 
     @Test
     fun `onStart runs starters but does not mark completion when some fail in NORMAL mode`() {
         every { LaunchMode.current() } returns LaunchMode.NORMAL
-        every { starterService.runAll() } returns false
+        every { startersAdapter.runAll() } returns false
 
         startup.onStart(StartupEvent())
 
-        verify { starterService.runAll() }
+        verify { startersAdapter.runAll() }
         verify(exactly = 0) { completionFlag.markCompleted() }
     }
 }

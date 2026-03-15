@@ -1,9 +1,8 @@
-package de.chrgroth.quarkus.starters
+package de.chrgroth.quarkus.starters.domain
 
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class StarterCompletionFlagTests {
+class StartupAdapterTests {
 
     private val flag = StarterCompletionFlag()
 

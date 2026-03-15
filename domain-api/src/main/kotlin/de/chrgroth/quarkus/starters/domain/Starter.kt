@@ -1,4 +1,4 @@
-package de.chrgroth.quarkus.starters
+package de.chrgroth.quarkus.starters.domain
 
 interface Starter {
     val id: String

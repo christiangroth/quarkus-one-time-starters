@@ -16,7 +16,6 @@ pluginManagement {
 
 rootProject.name = "quarkus-one-time-starters"
 
-include("starter-api")
 include("domain-api")
 include("domain-impl")
 include("adapter-out-persistence-mongodb")

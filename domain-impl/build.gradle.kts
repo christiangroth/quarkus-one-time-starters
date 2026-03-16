@@ -4,9 +4,9 @@ plugins {
 }
 
 dependencies {
-  implementation(project(":starter-api"))
   implementation(project(":domain-api"))
 
+  implementation("io.quarkus:quarkus-scheduler")
   implementation("io.quarkus:quarkus-micrometer")
   implementation(libs.kotlinLogging)
 

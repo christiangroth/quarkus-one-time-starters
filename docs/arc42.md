@@ -44,8 +44,8 @@ The library integrates into a Quarkus application as a set of CDI beans. Applica
 
 ## 4. Solution Strategy
 
-- **Hexagonal / Clean Architecture**: Client API (`starter-api`) → Domain Ports (`domain-api`) → Domain Impl (business logic) → Adapter (persistence)
-- **Clean client artifact**: `starter-api` exposes only `Starter` and `ScheduledSkipPredicate`; internal port interfaces are not on the client compile classpath
+- **Hexagonal / Clean Architecture**: Domain API (`domain-api`) → Domain Impl (business logic + ports) → Adapter (persistence)
+- **Clean client artifact**: `domain-api` exposes only the `Starter` interface; port contracts and Quarkus-specific adapters remain in `domain-impl`
 - **CDI-based extensibility**: User starters are auto-discovered via `Instance<Starter>`
 - **Idempotency via persistence**: Each starter's last status is stored in MongoDB; `SUCCEEDED` starters are skipped on restart
 - **Scheduler integration**: `ScheduledSkipPredicate` blocks all scheduled jobs until the `StartupPort` completion flag is set
@@ -62,9 +62,8 @@ The library integrates into a Quarkus application as a set of CDI beans. Applica
 
 | Module | Responsibility |
 |--------|---------------|
-| `starter-api` | Client-facing API: `Starter` interface, `ScheduledSkipPredicate` |
-| `domain-api` | Internal port contracts: `ExecutionPort`, `StartupPort`, `ExecutionStatus`, `RepositoryPort` |
-| `domain-impl` | Core orchestration: `ExecutionAdapter` (execution loop, metrics), `StartupAdapter` (startup event handler and completion flag) |
+| `domain-api` | Client-facing API: `Starter` interface |
+| `domain-impl` | Core orchestration: `ExecutionAdapter` (execution loop, metrics), `StartupAdapter` (startup event handler and completion flag), `ScheduledSkipPredicate`, port contracts (`ExecutionPort`, `StartupPort`, `RepositoryPort`) |
 | `adapter-out-persistence-mongodb` | MongoDB persistence: `StarterDocumentRepository` (implements `RepositoryPort`), `StarterIndexInitializer` |
 
 ---
@@ -88,7 +87,6 @@ The library integrates into a Quarkus application as a set of CDI beans. Applica
 
 The library is deployed as Maven artifacts to GitHub Packages:
 
-- `de.chrgroth.quarkus.starters:starter-api`
 - `de.chrgroth.quarkus.starters:domain-api`
 - `de.chrgroth.quarkus.starters:domain-impl`
 - `de.chrgroth.quarkus.starters:adapter-out-persistence-mongodb`

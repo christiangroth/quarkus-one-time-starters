@@ -20,9 +20,8 @@ Register tasks that must run exactly once during the application lifecycle. The 
 
 | Module | Description |
 |--------|-------------|
-| `starter-api` | Client-facing API: `Starter` interface, `ScheduledSkipPredicate` |
-| `domain-api` | Internal port contracts: `ExecutionPort`, `StartupPort`, `ExecutionStatus`, `RepositoryPort` |
-| `domain-impl` | Core orchestration: `ExecutionAdapter` (execution loop + metrics), `StartupAdapter` (startup event handler) |
+| `domain-api` | Client-facing API: `Starter` interface |
+| `domain-impl` | Core orchestration, port contracts and Quarkus adapters: `ExecutionAdapter`, `StartupAdapter`, `ScheduledSkipPredicate` |
 | `adapter-out-persistence-mongodb` | MongoDB persistence adapter via Quarkus Panache |
 
 ---
@@ -33,7 +32,7 @@ Register tasks that must run exactly once during the application lifecycle. The 
 
 ```kotlin
 // Gradle (Kotlin DSL)
-implementation("de.chrgroth.quarkus.starters:starter-api:<version>")
+implementation("de.chrgroth.quarkus.starters:domain-api:<version>")
 implementation("de.chrgroth.quarkus.starters:domain-impl:<version>")
 implementation("de.chrgroth.quarkus.starters:adapter-out-persistence-mongodb:<version>")
 ```

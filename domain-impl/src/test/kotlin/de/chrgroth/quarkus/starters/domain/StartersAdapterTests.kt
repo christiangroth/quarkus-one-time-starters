@@ -11,10 +11,12 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Instant
 import java.util.stream.Stream
+import de.chrgroth.quarkus.starters.domain.port.`in`.ExecutionStatus
+import de.chrgroth.quarkus.starters.domain.port.out.RepositoryPort
 
 class StartersAdapterTests {
 
-  private val repository: StarterRepository = mockk()
+  private val repository: RepositoryPort = mockk()
   private val meterRegistry = SimpleMeterRegistry()
   private val starters: Instance<Starter> = mockk()
 
@@ -36,7 +38,7 @@ class StartersAdapterTests {
   fun `runAll skips starter that already succeeded`() {
     val starter = mockk<Starter> { every { id } returns "starter-1" }
     every { starters.stream() } returns Stream.of(starter)
-    every { repository.lastStatus("starter-1") } returns StarterStatus.SUCCEEDED
+    every { repository.lastStatus("starter-1") } returns ExecutionStatus.SUCCEEDED
 
     val result = service.runAll()
 
@@ -58,7 +60,7 @@ class StartersAdapterTests {
 
     assertThat(result).isTrue()
     verify { starter.execute() }
-    verify { repository.recordExecution(eq("starter-1"), eq(StarterStatus.SUCCEEDED), any(), any(), isNull()) }
+    verify { repository.recordExecution(eq("starter-1"), eq(ExecutionStatus.SUCCEEDED), any(), any(), isNull()) }
   }
 
   @Test
@@ -74,7 +76,7 @@ class StartersAdapterTests {
     val result = service.runAll()
 
     assertThat(result).isFalse()
-    verify { repository.recordExecution(eq("starter-fail"), eq(StarterStatus.FAILED), any(), any(), eq("boom")) }
+    verify { repository.recordExecution(eq("starter-fail"), eq(ExecutionStatus.FAILED), any(), any(), eq("boom")) }
   }
 
   @Test
@@ -111,7 +113,7 @@ class StartersAdapterTests {
 
     val timer = meterRegistry.find("starter_execution_duration_seconds")
       .tag("id", "starter-1")
-      .tag("status", StarterStatus.SUCCEEDED.name)
+      .tag("status", ExecutionStatus.SUCCEEDED.name)
       .timer()
     assertThat(timer).isNotNull()
     assertThat(timer!!.count()).isEqualTo(1)
@@ -131,7 +133,7 @@ class StartersAdapterTests {
 
     val timer = meterRegistry.find("starter_execution_duration_seconds")
       .tag("id", "starter-fail")
-      .tag("status", StarterStatus.FAILED.name)
+      .tag("status", ExecutionStatus.FAILED.name)
       .timer()
     assertThat(timer).isNotNull()
     assertThat(timer!!.count()).isEqualTo(1)
@@ -141,7 +143,7 @@ class StartersAdapterTests {
   fun `runAll records gauge as success for already-succeeded starter`() {
     val starter = mockk<Starter> { every { id } returns "starter-1" }
     every { starters.stream() } returns Stream.of(starter)
-    every { repository.lastStatus("starter-1") } returns StarterStatus.SUCCEEDED
+    every { repository.lastStatus("starter-1") } returns ExecutionStatus.SUCCEEDED
 
     service.runAll()
 

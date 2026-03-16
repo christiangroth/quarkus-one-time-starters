@@ -1,28 +1,26 @@
 package de.chrgroth.quarkus.starters.domain
 
 import io.mockk.every
-import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import io.quarkus.runtime.LaunchMode
 import io.quarkus.runtime.StartupEvent
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class StarterStartupTests {Scheduler
+class StarterStartupTests {
 
     private val startersAdapter: ExecutionAdapter = mockk()
-    private val completionFlag: StartupAdapter = mockk()
 
-    private val startup = StarterStartup(startersAdapter, completionFlag)
+    private val startup = StartupAdapter(startersAdapter)
 
     @BeforeEach
     fun setup() {
         mockkStatic(LaunchMode::class)
-        justRun { completionFlag.markCompleted() }
     }
 
     @AfterEach
@@ -37,7 +35,7 @@ class StarterStartupTests {Scheduler
         startup.onStart(StartupEvent())
 
         verify(exactly = 0) { startersAdapter.runAll() }
-        verify { completionFlag.markCompleted() }
+        assertThat(startup.isCompleted()).isTrue()
     }
 
     @Test
@@ -47,7 +45,7 @@ class StarterStartupTests {Scheduler
         startup.onStart(StartupEvent())
 
         verify(exactly = 0) { startersAdapter.runAll() }
-        verify { completionFlag.markCompleted() }
+        assertThat(startup.isCompleted()).isTrue()
     }
 
     @Test
@@ -58,7 +56,7 @@ class StarterStartupTests {Scheduler
         startup.onStart(StartupEvent())
 
         verify { startersAdapter.runAll() }
-        verify { completionFlag.markCompleted() }
+        assertThat(startup.isCompleted()).isTrue()
     }
 
     @Test
@@ -69,6 +67,6 @@ class StarterStartupTests {Scheduler
         startup.onStart(StartupEvent())
 
         verify { startersAdapter.runAll() }
-        verify(exactly = 0) { completionFlag.markCompleted() }
+        assertThat(startup.isCompleted()).isFalse()
     }
 }

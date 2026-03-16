@@ -20,8 +20,8 @@ Register tasks that must run exactly once during the application lifecycle. The 
 
 | Module | Description |
 |--------|-------------|
-| `domain-api` | Public API: `Starter` interface, `StarterStatus`, `StarterCompletionFlag`, `StarterSkipPredicate` |
-| `domain-impl` | Core logic: `StarterService` (execution loop + metrics), `StarterStartup` (startup event handler) |
+| `domain-api` | Public contracts: `Starter` interface, `ScheduledSkipPredicate`, `ExecutionPort`, `StartupPort`, `ExecutionStatus`, `RepositoryPort` |
+| `domain-impl` | Core orchestration: `ExecutionAdapter` (execution loop + metrics), `StartupAdapter` (startup event handler) |
 | `adapter-out-persistence-mongodb` | MongoDB persistence adapter via Quarkus Panache |
 
 ---
@@ -42,7 +42,7 @@ Artifacts are published to [GitHub Packages](https://github.com/christiangroth/q
 ### 2. Implement a starter
 
 ```kotlin
-import de.chrgroth.quarkus.starters.Starter
+import de.chrgroth.quarkus.starters.domain.Starter
 import jakarta.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
@@ -61,13 +61,13 @@ The `id` must be **unique** across all starters. Starters are executed in **alph
 
 ### 3. Block scheduled jobs (optional)
 
-Use `StarterSkipPredicate` on any `@Scheduled` method to pause it until all starters complete:
+Use `ScheduledSkipPredicate` on any `@Scheduled` method to pause it until all starters complete:
 
 ```kotlin
-import de.chrgroth.quarkus.starters.StarterSkipPredicate
+import de.chrgroth.quarkus.starters.domain.ScheduledSkipPredicate
 import io.quarkus.scheduler.Scheduled
 
-@Scheduled(every = "10s", skipExecutionIf = StarterSkipPredicate::class)
+@Scheduled(every = "10s", skipExecutionIf = ScheduledSkipPredicate::class)
 fun periodicJob() {
     // Only runs after all starters have succeeded
 }

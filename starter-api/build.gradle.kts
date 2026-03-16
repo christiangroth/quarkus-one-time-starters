@@ -4,13 +4,8 @@ plugins {
 }
 
 dependencies {
-  implementation(project(":starter-api"))
+  implementation("io.quarkus:quarkus-scheduler")
   implementation(project(":domain-api"))
-
-  implementation("io.quarkus:quarkus-micrometer")
-  implementation(libs.kotlinLogging)
-
-  testImplementation(libs.mockk)
 }
 
 allOpen {

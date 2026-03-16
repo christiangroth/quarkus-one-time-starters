@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-  implementation(project(":domain-api"))
+  implementation(project(":domain-impl"))
 
   implementation("io.quarkus:quarkus-mongodb-panache-kotlin")
 }

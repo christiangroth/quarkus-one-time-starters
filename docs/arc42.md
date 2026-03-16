@@ -44,7 +44,8 @@ The library integrates into a Quarkus application as a set of CDI beans. Applica
 
 ## 4. Solution Strategy
 
-- **Hexagonal / Clean Architecture**: Domain API (interfaces) → Domain Impl (business logic) → Adapter (persistence)
+- **Hexagonal / Clean Architecture**: Domain API (`domain-api`) → Domain Impl (business logic + internal ports) → Adapter (persistence)
+- **Clean client artifact**: `domain-api` exposes `Starter`, `ScheduledSkipPredicate`, and `StartupPort`; internal port interfaces (`ExecutionPort`, `RepositoryPort`) remain in `domain-impl`
 - **CDI-based extensibility**: User starters are auto-discovered via `Instance<Starter>`
 - **Idempotency via persistence**: Each starter's last status is stored in MongoDB; `SUCCEEDED` starters are skipped on restart
 - **Scheduler integration**: `ScheduledSkipPredicate` blocks all scheduled jobs until the `StartupPort` completion flag is set
@@ -61,8 +62,8 @@ The library integrates into a Quarkus application as a set of CDI beans. Applica
 
 | Module | Responsibility |
 |--------|---------------|
-| `domain-api` | Public contracts: `Starter`, `ScheduledSkipPredicate`, `ExecutionPort`, `StartupPort`, `ExecutionStatus`, `RepositoryPort` |
-| `domain-impl` | Core orchestration: `ExecutionAdapter` (execution loop, metrics), `StartupAdapter` (startup event handler and completion flag) |
+| `domain-api` | Client-facing API: `Starter` interface, `ScheduledSkipPredicate`, `StartupPort` |
+| `domain-impl` | Core orchestration: `ExecutionAdapter` (execution loop, metrics), `StartupAdapter` (startup event handler and completion flag), internal port contracts (`ExecutionPort`, `RepositoryPort`) |
 | `adapter-out-persistence-mongodb` | MongoDB persistence: `StarterDocumentRepository` (implements `RepositoryPort`), `StarterIndexInitializer` |
 
 ---

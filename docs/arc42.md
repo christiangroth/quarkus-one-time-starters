@@ -47,7 +47,7 @@ The library integrates into a Quarkus application as a set of CDI beans. Applica
 - **Hexagonal / Clean Architecture**: Domain API (interfaces) → Domain Impl (business logic) → Adapter (persistence)
 - **CDI-based extensibility**: User starters are auto-discovered via `Instance<Starter>`
 - **Idempotency via persistence**: Each starter's last status is stored in MongoDB; `SUCCEEDED` starters are skipped on restart
-- **Scheduler integration**: `StarterSkipPredicate` blocks all scheduled jobs until the `StarterCompletionFlag` is set
+- **Scheduler integration**: `ScheduledSkipPredicate` blocks all scheduled jobs until the `StartupPort` completion flag is set
 
 ---
 
@@ -55,15 +55,15 @@ The library integrates into a Quarkus application as a set of CDI beans. Applica
 
 ### Module Overview
 
-![Module structure](https://kroki.io/plantuml/svg/eNqFUttKBDEMfe9X1H2f_QBZhgVF2DfZ-YLYxjFMm5Q2I66XfzcKCuNefM3hXHKSbVOoOufkrvQJM_qSgNi1ibhAheyD5CKMrIMeEvqKQYHHhM4VCBOM6FdRsnE6KLTym02WOCfse__mvCdWrI8Q0A9fPlhPzfZYpJFKPRgaErT2g9yYeUIl4bsE4190mKjcV4wUQNFA5Dn_Ygo6N_dxHJNM8ijnUhfrMwU8Gn83VRaaEKEY1MmsXcHaqClywC4LjxIfLvvcSpizNXt-_x1HfNkxKUGiV2vPvJd7rNf98gDXPmJBjs0Lu__zXeafDWq89_7E_bbGtGf6BD991Kg=)
+![Module structure](https://kroki.io/plantuml/svg/hVLLbgIxDLzvV0Tclw-o0IpK7YEb6n6BSVxqkdhR4kjQx793UWhhd0V7HY9nxo91Vkhagm_ygThCgmCshCiMrL2ePJqEVoH3Hpsmgj3AHs3CSQDiFiItzGoVxBWPXWc-GmOIFdMrWDT9WRrTCHs-oi1KwltJOmeXOMNfMEomlXS6lKyHnE1v3_Ds6voDxW1CRxYUhzJyCVebQVVLbr7m2SlEPwtftX-7Hx3EOsHFtGb8gW9VoWKtFG0jpkxZkS22QXgvbnfH6bKiJ7ElDAu_zjplbNjhccOkBJ7eq_d4kuWyG9_lwTiMyC4b4eb_fH_33w069H120yNNF1hJ49uPd1kZtz-wHqyHv_wG)
 
 ### Module Descriptions
 
 | Module | Responsibility |
 |--------|---------------|
-| `domain-api` | Public contracts: `Starter`, `StarterRepository`, `StarterStatus`, `StarterCompletionFlag`, `StarterSkipPredicate` |
-| `domain-impl` | Core orchestration: `StarterService` (execution loop, metrics), `StarterStartup` (startup event handler) |
-| `adapter-out-persistence-mongodb` | MongoDB persistence: `StarterDocumentRepository` (implements `StarterRepository`), `StarterIndexInitializer` |
+| `domain-api` | Public contracts: `Starter`, `ScheduledSkipPredicate`, `ExecutionPort`, `StartupPort`, `ExecutionStatus`, `RepositoryPort` |
+| `domain-impl` | Core orchestration: `ExecutionAdapter` (execution loop, metrics), `StartupAdapter` (startup event handler and completion flag) |
+| `adapter-out-persistence-mongodb` | MongoDB persistence: `StarterDocumentRepository` (implements `RepositoryPort`), `StarterIndexInitializer` |
 
 ---
 
@@ -71,7 +71,7 @@ The library integrates into a Quarkus application as a set of CDI beans. Applica
 
 ### Startup Sequence
 
-![Startup sequence](https://kroki.io/plantuml/svg/eNqdk99qwjAUxu_7FEevKmOw3Q4cinYwsBu27AGy5FjD0iTkj-jbL22qrKWOzYsm5Zzv_Pqd02RhHTHO1yKZuD3WCFoQLhMdgpxyTaSD6dYT8-XtFIiFbS9VNsVo2s3r0RSaA6fYB3Y54LUWLbUcKy1QK8udMqdGUvQkObaCilsX03mSbOH-eeAInqB7yw4oXUKEgw3xku5zxRAmc3h7L_LlJoFh4RiqDmNYqeA5fJylswSFxZ-4-Z9wcSABZ7xcChE4AEIpDTtlAAndn5WQWhV2Bp8n4KyRwRASsEUgCWJdyDhv07Ow6ZQIg4SdoPxYrbJsna3bzBgkDxCvGXEIFfEVpo-R0naoUTIuKwj2doQLZFcxZcDgEal3mM46VWPEekrR2i5yrQuDVBmWtfVcyfRie_ZLYX4pBMfrMLS7fgddD3ikqBvqPz28LF83Nxp4uBiQcWJxj-uQM3bciBBlMzhk7cjjH-2Fbjq10ULzLMISbv43aKlPJA==)
+![Startup sequence](https://kroki.io/plantuml/svg/nZPfSsMwFMbv-xTHXXWIoLfCZGOrIKzqWnyAmJx1wbQJ-SPr23vabsVudeAumsD58v36ndN07jyzPpQqMrRLLg2rPEw2gdmv4CbAHGwGUt6eNwvBjEc7kJI98uClrsbESWtEC7I0quXmAz1Do5302tbv2vpGzwZ6imTOsJDO27qR0yjawN3TSSB4PBaSb6x8xJSHNQsV36VaINzM4PUtSxfrCE6NY6iSprDUFJheLuJphMrhb9zsIu50HgS0oVooRSQApbWBrbaAjO_gOJ3YUfco4LMGKZpjcI4hdEYsxZwnmw8uPh5tumXKIhM15B_LZZKsklWrjGNSwgQjmEcoWCgwfug4bZ8GKyGrAijilkmF4gIoJxC2dYynh3NNGBc4R-cOlb97sci1Fb0a9-GnF61pbwUvS6rdDvs4dIJ7jqax_jvH8-JlfXWI-z5E1c2u27v1nDR2AZlSeTNCFO34u-87KF11j7sQzTOnhf7-Hw)
 
 ### Key Runtime Behaviors
 

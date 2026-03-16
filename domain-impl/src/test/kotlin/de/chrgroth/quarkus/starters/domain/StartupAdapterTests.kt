@@ -1,11 +1,12 @@
-package de.chrgroth.quarkus.starters
+package de.chrgroth.quarkus.starters.domain
 
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class StarterCompletionFlagTests {
+class StartupAdapterTests {
 
-    private val flag = StarterCompletionFlag()
+    private val flag = StartupAdapter(mockk())
 
     @Test
     fun `isCompleted returns false by default`() {

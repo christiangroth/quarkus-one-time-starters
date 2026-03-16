@@ -1,28 +1,26 @@
-package de.chrgroth.quarkus.starters
+package de.chrgroth.quarkus.starters.domain
 
 import io.mockk.every
-import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import io.quarkus.runtime.LaunchMode
 import io.quarkus.runtime.StartupEvent
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class StarterStartupTests {
 
-    private val starterService: StarterService = mockk()
-    private val completionFlag: StarterCompletionFlag = mockk()
+    private val startersAdapter: ExecutionAdapter = mockk()
 
-    private val startup = StarterStartup(starterService, completionFlag)
+    private val startup = StartupAdapter(startersAdapter)
 
     @BeforeEach
     fun setup() {
         mockkStatic(LaunchMode::class)
-        justRun { completionFlag.markCompleted() }
     }
 
     @AfterEach
@@ -36,8 +34,8 @@ class StarterStartupTests {
 
         startup.onStart(StartupEvent())
 
-        verify(exactly = 0) { starterService.runAll() }
-        verify { completionFlag.markCompleted() }
+        verify(exactly = 0) { startersAdapter.runAll() }
+        assertThat(startup.isCompleted()).isTrue()
     }
 
     @Test
@@ -46,29 +44,29 @@ class StarterStartupTests {
 
         startup.onStart(StartupEvent())
 
-        verify(exactly = 0) { starterService.runAll() }
-        verify { completionFlag.markCompleted() }
+        verify(exactly = 0) { startersAdapter.runAll() }
+        assertThat(startup.isCompleted()).isTrue()
     }
 
     @Test
     fun `onStart runs starters and marks completion when all succeed in NORMAL mode`() {
         every { LaunchMode.current() } returns LaunchMode.NORMAL
-        every { starterService.runAll() } returns true
+        every { startersAdapter.runAll() } returns true
 
         startup.onStart(StartupEvent())
 
-        verify { starterService.runAll() }
-        verify { completionFlag.markCompleted() }
+        verify { startersAdapter.runAll() }
+        assertThat(startup.isCompleted()).isTrue()
     }
 
     @Test
     fun `onStart runs starters but does not mark completion when some fail in NORMAL mode`() {
         every { LaunchMode.current() } returns LaunchMode.NORMAL
-        every { starterService.runAll() } returns false
+        every { startersAdapter.runAll() } returns false
 
         startup.onStart(StartupEvent())
 
-        verify { starterService.runAll() }
-        verify(exactly = 0) { completionFlag.markCompleted() }
+        verify { startersAdapter.runAll() }
+        assertThat(startup.isCompleted()).isFalse()
     }
 }

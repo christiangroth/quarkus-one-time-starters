@@ -140,6 +140,6 @@ Exceptions thrown by a `Starter.execute()` are caught, the failure is recorded, 
 
 | Risk | Mitigation |
 |------|-----------|
-| `StarterStatus.PENDING` is defined but not persisted | The status currently acts as documentation; `null` return from `lastStatus()` implies pending |
+| `ExecutionStatus.PENDING` is defined but not persisted | The status currently acts as documentation; `null` return from `lastStatus()` implies pending |
 | No retry mechanism within a single run | By design — failed starters are retried on the next application start |
 | MongoDB index sync runs on every startup | Lightweight operation; no impact expected in production workloads |

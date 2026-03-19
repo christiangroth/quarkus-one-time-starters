@@ -9,15 +9,15 @@ class StartupAdapterTests {
     private val flag = StartupAdapter(mockk())
 
     @Test
-    fun `isCompleted returns false by default`() {
-        assertThat(flag.isCompleted()).isFalse()
+    fun `allCompleted returns false by default`() {
+        assertThat(flag.allCompleted()).isFalse()
     }
 
     @Test
-    fun `isCompleted returns true after markCompleted`() {
+    fun `allCompleted returns true after markCompleted`() {
         flag.markCompleted()
 
-        assertThat(flag.isCompleted()).isTrue()
+        assertThat(flag.allCompleted()).isTrue()
     }
 
     @Test
@@ -25,6 +25,6 @@ class StartupAdapterTests {
         flag.markCompleted()
         flag.markCompleted()
 
-        assertThat(flag.isCompleted()).isTrue()
+        assertThat(flag.allCompleted()).isTrue()
     }
 }

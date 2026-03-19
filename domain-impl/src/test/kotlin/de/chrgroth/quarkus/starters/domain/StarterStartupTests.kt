@@ -35,7 +35,7 @@ class StarterStartupTests {
         startup.onStart(StartupEvent())
 
         verify(exactly = 0) { startersAdapter.runAll() }
-        assertThat(startup.isCompleted()).isTrue()
+        assertThat(startup.allCompleted()).isTrue()
     }
 
     @Test
@@ -45,7 +45,7 @@ class StarterStartupTests {
         startup.onStart(StartupEvent())
 
         verify(exactly = 0) { startersAdapter.runAll() }
-        assertThat(startup.isCompleted()).isTrue()
+        assertThat(startup.allCompleted()).isTrue()
     }
 
     @Test
@@ -56,7 +56,7 @@ class StarterStartupTests {
         startup.onStart(StartupEvent())
 
         verify { startersAdapter.runAll() }
-        assertThat(startup.isCompleted()).isTrue()
+        assertThat(startup.allCompleted()).isTrue()
     }
 
     @Test
@@ -67,6 +67,6 @@ class StarterStartupTests {
         startup.onStart(StartupEvent())
 
         verify { startersAdapter.runAll() }
-        assertThat(startup.isCompleted()).isFalse()
+        assertThat(startup.allCompleted()).isFalse()
     }
 }

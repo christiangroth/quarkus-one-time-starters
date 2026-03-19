@@ -1,3 +1,11 @@
+# 0.6.1 (2026.03.19)
+
+## Bugfixes / Chore
+* `StartupPort` moved to internal domain-impl; replaced by `StartersStatusProvider` with `allCompleted()` in the public API.
+
+
+
+---
 # 0.6.0 (2026.03.16)
 
 ## New Features

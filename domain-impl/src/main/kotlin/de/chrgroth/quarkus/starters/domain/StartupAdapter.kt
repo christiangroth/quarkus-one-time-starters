@@ -1,7 +1,7 @@
 package de.chrgroth.quarkus.starters.domain
 
 import de.chrgroth.quarkus.starters.domain.port.`in`.StartupPort
-import de.chrgroth.quarkus.starters.domain.port.`in`.StartupStatus
+import de.chrgroth.quarkus.starters.domain.StartersStatusProvider
 import io.quarkus.runtime.LaunchMode
 import io.quarkus.runtime.StartupEvent
 import jakarta.enterprise.context.ApplicationScoped
@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 @Suppress("Unused", "UnusedParameter")
 class StartupAdapter(
   private val startersAdapter: ExecutionAdapter,
-) : StartupPort, StartupStatus {
+) : StartupPort, StartersStatusProvider {
 
   private val completed = AtomicBoolean(false)
 

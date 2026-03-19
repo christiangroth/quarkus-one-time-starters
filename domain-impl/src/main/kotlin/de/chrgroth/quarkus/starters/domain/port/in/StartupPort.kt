@@ -4,7 +4,7 @@ package de.chrgroth.quarkus.starters.domain.port.`in`
  * Inbound port for managing the one-time starter completion flag.
  *
  * Implementations track whether all starters have finished successfully so that
- * the Quarkus scheduler can be unblocked via [de.chrgroth.quarkus.starters.domain.port.`in`.StartupStatus].
+ * the Quarkus scheduler can be unblocked via [de.chrgroth.quarkus.starters.domain.StartersStatusProvider].
  */
 interface StartupPort {
   /** Marks all starters as completed, allowing the Quarkus scheduler to proceed. */

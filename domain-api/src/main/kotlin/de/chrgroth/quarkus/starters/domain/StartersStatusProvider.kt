@@ -1,12 +1,12 @@
-package de.chrgroth.quarkus.starters.domain.port.`in`
+package de.chrgroth.quarkus.starters.domain
 
 /**
  * Exposes the one-time starter completion state to applications using this library.
  *
  * Implementations indicate whether all starters have finished successfully so that
- * [de.chrgroth.quarkus.starters.domain.ScheduledSkipPredicate] can unblock the Quarkus scheduler.
+ * [ScheduledSkipPredicate] can unblock the Quarkus scheduler.
  */
-interface StartupStatus {
+interface StartersStatusProvider {
   /** Returns `true` once all starters have completed, `false` otherwise. */
   fun allCompleted(): Boolean
 }

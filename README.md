@@ -20,7 +20,7 @@ Register tasks that must run exactly once during the application lifecycle. The 
 
 | Module | Description |
 |--------|-------------|
-| `domain-api` | Client-facing API: `Starter` interface, `ScheduledSkipPredicate`, `StartupPort` |
+| `domain-api` | Client-facing API: `Starter` interface, `ScheduledSkipPredicate`, `StartersStatusProvider` |
 | `domain-impl` | Core orchestration, internal port contracts: `ExecutionAdapter`, `StartupAdapter` |
 | `adapter-out-persistence-mongodb` | MongoDB persistence adapter via Quarkus Panache |
 

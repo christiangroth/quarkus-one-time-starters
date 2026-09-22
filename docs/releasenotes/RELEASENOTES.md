@@ -1,3 +1,11 @@
+# 0.7.0 (2026.09.22)
+
+## New Features
+* `ScheduledSkipPredicate` is now an application-scoped CDI bean, so client applications no longer need to define a producer for it.
+
+
+
+---
 # 0.6.1 (2026.03.19)
 
 ## Bugfixes / Chore

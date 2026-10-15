@@ -7,10 +7,12 @@ import jakarta.enterprise.context.ApplicationScoped
 import java.time.Instant
 
 @ApplicationScoped
-class StarterDocumentRepository : RepositoryPort, PanacheMongoRepositoryBase<StarterDocument, String> {
- 
+class StarterDocumentRepository(
+  private val metricsRecorder: MetricsRecorder,
+) : RepositoryPort, PanacheMongoRepositoryBase<StarterDocument, String> {
+
   override fun lastStatus(starterId: String): ExecutionStatus? =
-    findById(starterId)?.lastStatus?.let { ExecutionStatus.valueOf(it) }
+    metricsRecorder.timed(OPERATION_FIND_BY_ID) { findById(starterId) }?.lastStatus?.let { ExecutionStatus.valueOf(it) }
 
   override fun recordExecution(
     starterId: String,
@@ -19,7 +21,7 @@ class StarterDocumentRepository : RepositoryPort, PanacheMongoRepositoryBase<Sta
     finishedAt: Instant,
     errorMessage: String?,
   ) {
-    val existingDoc = findById(starterId)
+    val existingDoc = metricsRecorder.timed(OPERATION_FIND_BY_ID) { findById(starterId) }
     val doc = existingDoc ?: StarterDocument().apply { this.starterId = starterId }
     doc.lastStatus = status.name
     val execution = StarterExecutionDocument().apply {
@@ -29,6 +31,11 @@ class StarterDocumentRepository : RepositoryPort, PanacheMongoRepositoryBase<Sta
       this.errorMessage = errorMessage
     }
     doc.executions = doc.executions + execution
-    persistOrUpdate(doc)
+    metricsRecorder.timed(OPERATION_SAVE) { persistOrUpdate(doc) }
+  }
+
+  companion object {
+    const val OPERATION_FIND_BY_ID = "starters.findById"
+    const val OPERATION_SAVE = "starters.save"
   }
 }

@@ -7,6 +7,7 @@ dependencies {
   implementation(project(":domain-impl"))
 
   implementation("io.quarkus:quarkus-mongodb-panache-kotlin")
+  implementation("io.quarkus:quarkus-micrometer")
 }
 
 allOpen {

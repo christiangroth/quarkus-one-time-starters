@@ -13,6 +13,7 @@ import mu.KLogging
 @Suppress("Unused", "UnusedParameter")
 class StarterIndexInitializer(
   private val repository: StarterDocumentRepository,
+  private val metricsRecorder: MetricsRecorder,
 ) {
 
   private val desiredIndexes: List<IndexModel> = listOf(
@@ -26,7 +27,7 @@ class StarterIndexInitializer(
   }
 
   fun onStart(@Observes event: StartupEvent) {
-    syncIndexes(repository.mongoCollection())
+    metricsRecorder.timed(OPERATION_INDEXES_SYNC) { syncIndexes(repository.mongoCollection()) }
   }
 
   private fun syncIndexes(collection: MongoCollection<StarterDocument>) {
@@ -51,5 +52,7 @@ class StarterIndexInitializer(
     }
   }
 
-  companion object : KLogging()
+  companion object : KLogging() {
+    const val OPERATION_INDEXES_SYNC = "starters.indexes.sync"
+  }
 }

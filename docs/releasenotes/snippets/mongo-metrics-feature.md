@@ -1,1 +1,0 @@
-* MongoDB operations of the starters library are now recorded as `mongodb.query` timer and `mongodb.slow.queries` counter metrics (tag `operation`, prefixed `starters.`), including a warning log for slow queries (threshold configurable via `starters.mongodb.slow-query-threshold-ms`, default 100).
